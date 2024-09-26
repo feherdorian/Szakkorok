@@ -1,0 +1,39 @@
+.my-container {
+    max-width: 1400px;
+}
+
+.my-border {
+    border-radius: 25px;
+}
+
+.my-pointer {
+    cursor: pointer;
+}
+
+.desc {
+    color: #b8b8b8;
+    font-style: italic;
+}
+
+.my-href {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.my-href:hover {
+    background-color: #236725;
+    transform: scale(1.1);
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--text-color);
+}
+
+body {
+    color: #fff;
+}
