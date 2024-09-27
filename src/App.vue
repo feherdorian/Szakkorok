@@ -47,7 +47,7 @@ onMounted(() => {
 <template>
   <div class="container-fluid p-4">
     <header class="mb-4 text-center">
-      <h1 class="display-3">Home Page</h1>
+      <h1 class="display-3">Szakkörök</h1>
 
       <button class="btn btn-theme" @click="toggleThemeWindow">
         Choose Theme
@@ -74,9 +74,10 @@ onMounted(() => {
           :to="{ path: '/' }"
           :class="{ active: $route.path === '/' }"
         >
-          <i class="fa fa-plus"></i> Home
+          <i class="fa fa-plus"></i> Szakkörök
         </RouterLink>
       </li>
+      
       <li></li>
     </ul>
 
