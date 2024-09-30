@@ -116,7 +116,7 @@ export default {
 
 <style scoped>
 .szakkorok-container {
-  display: flex; /* Flexbox elrendezés a gyerekek és szakkörök számára */
+  display: flex; /* Flexbox elrendezés a gyerekek számára */
   justify-content: space-between; /* Egyenlő távolság a dobozok között */
   padding: 20px; /* Belső margó */
   align-items: flex-start; /* Felső igazítás */
@@ -184,6 +184,10 @@ tr:hover {
   background-color: var(--bg-black-50); /* Háttér szín a dobozokban */
   box-shadow: 0 4px 20px var(--text-color); /* Világítás / árnyék hatás */
   transition: transform 0.3s, box-shadow 0.3s; /* Animáció az átalakulásokhoz */
+
+  /* Max magasság beállítása és görgetés engedélyezése a túltöltött tartalomhoz */
+  max-height: 300px; /* Állítsd be ezt a magasságot szükség szerint */
+  overflow-y: auto; /* Engedélyezd a függőleges görgetést, ha a tartalom túllépi a max magasságot */
 }
 
 .szakkor-box:hover {
@@ -203,4 +207,7 @@ tr:hover {
   background-color: var(--bg-black-50); /* Háttér szín a lehetőségekhez */
   color: white; /* Szöveg szín */
 }
+
+
+
 </style>

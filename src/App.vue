@@ -41,7 +41,6 @@ onMounted(() => {
     <header class="mb-4 text-center position-relative">
       <h1 class="display-3">
         <span class="title-text">Szakkörök</span>
-        <span class="title-border"></span>
       </h1>
 
       <button class="btn btn-theme" @click="toggleThemeWindow">
@@ -60,6 +59,8 @@ onMounted(() => {
           ></div>
         </div>
       </div>
+
+      <!-- Elválasztó vonal -->
     </header>
 
     <ul class="nav justify-content-center mb-4">
@@ -98,6 +99,17 @@ header {
 /* Style for the title text */
 .title-text {
   display: inline-block; /* Makes the span only take up as much space as needed */
+  position: relative;
+}
+
+.title-text::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: #fff;
 }
 
 /* Style for the border below the title */
