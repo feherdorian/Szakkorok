@@ -18,20 +18,23 @@
     <div class="separator"></div>
 
     <div class="szakkorok-lista box">
-      <h3 class="title">{{ selectedGyerek ? selectedGyerek.nev + ' szakkörei:' : 'Szakkörök' }}</h3>
-      <div v-if="selectedGyerek">
-        <ul>
-          <!-- Szakkörök listája a kiválasztott gyerek alapján -->
-          <li v-for="szakkor in szakkorok" :key="szakkor.id">
-            <span class="szakkor-nev">{{ szakkor.nev }} (Tagok: {{ szakkor.tagokSzama }})</span>
-            <input type="checkbox" v-model="szakkor.kivalasztva" @change="toggleSzakkor(szakkor)" />
-          </li>
-        </ul>
-      </div>
-      <div v-else>
-        <!-- Üzenet, ha nincs kiválasztva gyerek -->
-        <p class="message">Kérlek, válassz egy gyereket!</p>
-      </div>
+      <h3 class="title">Szakkörök</h3>
+      <ul>
+        <!-- Szakkörök listája -->
+        <li 
+          v-for="szakkor in szakkorok" 
+          :key="szakkor.id" 
+          @click="toggleGyerekInSzakkor(szakkor)"
+          :class="{ active: szakkor.gyerekek.includes(selectedGyerek?.id) }">
+          <span class="szakkor-nev">{{ szakkor.nev }}</span>
+          <ul>
+            <!-- Gyerekek listája, akik részt vesznek a szakkörben -->
+            <li v-for="gyerekId in szakkor.gyerekek" :key="gyerekId">
+              {{ gyerekek.find(gyerek => gyerek.id === gyerekId).nev }}
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -55,12 +58,12 @@ export default {
       ],
       // Szakkörök adatai
       szakkorok: [
-        { id: 1, nev: 'Kosárlabda', tagokSzama: 10, gyerekek: [1, 2], kivalasztva: false },
-        { id: 2, nev: 'Rajz', tagokSzama: 5, gyerekek: [3], kivalasztva: false },
-        { id: 3, nev: 'Foci', tagokSzama: 12, gyerekek: [1], kivalasztva: false },
-        { id: 4, nev: 'Zene', tagokSzama: 8, gyerekek: [], kivalasztva: false },
-        { id: 5, nev: 'Tánc', tagokSzama: 7, gyerekek: [], kivalasztva: false },
-        { id: 6, nev: 'Programozás', tagokSzama: 4, gyerekek: [], kivalasztva: false },
+        { id: 1, nev: 'Kosárlabda', gyerekek: [] },
+        { id: 2, nev: 'Rajz', gyerekek: [] },
+        { id: 3, nev: 'Foci', gyerekek: [] },
+        { id: 4, nev: 'Zene', gyerekek: [] },
+        { id: 5, nev: 'Tánc', gyerekek: [] },
+        { id: 6, nev: 'Programozás', gyerekek: [] },
       ],
       // Kiválasztott gyerek
       selectedGyerek: null,
@@ -70,25 +73,19 @@ export default {
     // Kiválasztott gyerek beállítása
     selectGyerek(gyerek) {
       this.selectedGyerek = gyerek;
-      this.szakkorok.forEach(szakkor => {
-        szakkor.kivalasztva = szakkor.gyerekek.includes(gyerek.id);
-      });
     },
-    // Szakkörök kiválasztásának váltása
-    toggleSzakkor(szakkor) {
-      if (szakkor.kivalasztva) {
-        // Ha kiválasztva van, és a gyerek nincs benne, hozzáadjuk
-        if (!szakkor.gyerekek.includes(this.selectedGyerek.id)) {
-          szakkor.gyerekek.push(this.selectedGyerek.id);
-          szakkor.tagokSzama++;
-        }
+    // Gyerek hozzáadása vagy eltávolítása a szakkörből
+    toggleGyerekInSzakkor(szakkor) {
+      if (!this.selectedGyerek) return; // Ha nincs kiválasztva gyerek, nem történik semmi
+
+      const gyerekIndex = szakkor.gyerekek.indexOf(this.selectedGyerek.id);
+
+      if (gyerekIndex === -1) {
+        // Ha a gyerek még nincs a szakkörben, hozzáadjuk
+        szakkor.gyerekek.push(this.selectedGyerek.id);
       } else {
-        // Ha nem kiválasztva van, eltávolítjuk a gyereket
-        const index = szakkor.gyerekek.indexOf(this.selectedGyerek.id);
-        if (index > -1) {
-          szakkor.gyerekek.splice(index, 1);
-          szakkor.tagokSzama--;
-        }
+        // Ha már benne van, eltávolítjuk
+        szakkor.gyerekek.splice(gyerekIndex, 1);
       }
     },
   },
@@ -101,7 +98,7 @@ export default {
   justify-content: space-between; /* Egyenlő távolság a dobozok között */
   padding: 20px; /* Belső margó */
   align-items: flex-start; /* Felső igazítás */
-  background-color: var(--bg-black-50); /* Háttér szín */
+  background-color: var(--bg-black-100); /* Háttér szín */
 }
 
 .box {
@@ -146,14 +143,9 @@ li:last-child {
   border-bottom: none; /* Utolsó listaelem alsó határvonalának eltüntetése */
 }
 
-li.selected {
-  font-weight: bold; /* Kiemelt szöveg vastagsága */
-  background-color: var(--text-color); /* Kiválasztott gyerek háttérszín */
-  border-left: 4px solid var(--bg-black-50); /* Kiválasztott gyerek stílus */
-}
-
-input[type="checkbox"] {
-  margin-left: 10px; /* Checkbox bal margó */
+li.active {
+  background-color: var(--text-color); /* Kiemelt háttérszín */
+  color: white; /* Kiemelt szín */
 }
 
 .title {
@@ -161,13 +153,14 @@ input[type="checkbox"] {
   margin-bottom: 15px; /* Cím alatti margó */
 }
 
-.message {
-  color: var(--text-color); /* Szín a szövegeknek */
-  margin: 10px 0; /* Szöveg körüli margó */
-}
-
 .szakkor-nev {
   font-weight: bold; /* Kiemelt szakkör neve vastag */
   color: white; /* Kiemelt szakkör neve színe */
+}
+
+ul ul {
+  margin-top: 10px; /* Gyereklista eltolása */
+  padding-left: 20px; /* Gyereklista bal margó */
+  color: white; /* Szín a gyerekek nevének */
 }
 </style>
