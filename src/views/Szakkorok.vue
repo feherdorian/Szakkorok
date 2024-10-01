@@ -121,6 +121,7 @@ export default {
   padding: 20px; /* Belső margó */
   align-items: flex-start; /* Felső igazítás */
   background-color: var(--bg-black-100); /* Háttér szín */
+  flex-wrap: wrap; /* A tartalom több sorba kerül, ha nem fér el egy sorban */
 }
 
 .box {
@@ -131,6 +132,7 @@ export default {
   background-color: var(--bg-black-50); /* Háttér szín a dobozokban */
   box-shadow: 0 4px 20px var(--text-color); /* Világítás / árnyék hatás */
   transition: transform 0.3s, box-shadow 0.3s; /* Animáció az átalakulásokhoz */
+  margin-bottom: 20px; /* Alsó margó, hogy a dobozok ne érjenek össze kis képernyőkön */
 }
 
 .box:hover {
@@ -173,7 +175,7 @@ tr:hover {
 
 .szakkorok-grid {
   display: grid; /* Rács elrendezés */
-  grid-template-columns: repeat(2, 1fr); /* Két oszlop */
+  grid-template-columns: repeat(2, 1fr); /* Alapértelmezett 2 oszlopos elrendezés */
   gap: 20px; /* Két doboz közötti távolság */
 }
 
@@ -192,7 +194,7 @@ tr:hover {
 
 .szakkor-box:hover {
   transform: translateY(-3px); /* Felugrásos effektus hover esetén */
-  box-shadow: 0 8px 40px  var(--text-color); /* Tovább erősített árnyék hover esetén */
+  box-shadow: 0 8px 40px var(--text-color); /* Tovább erősített árnyék hover esetén */
 }
 
 .szakkor-select {
@@ -208,6 +210,33 @@ tr:hover {
   color: white; /* Szöveg szín */
 }
 
+/* Reszponzív megjelenítés kis képernyőkön */
+@media (max-width: 768px) {
+  .szakkorok-container {
+    flex-direction: column; /* Kis képernyőkön egymás alá kerülnek az elemek */
+  }
 
+  .box {
+    width: 100%; /* A dobozok teljes szélességűek lesznek kis képernyőkön */
+  }
 
+  .szakkorok-grid {
+    grid-template-columns: 1fr; /* Egyszerűsítjük a rácsot egy oszlopos elrendezésre */
+  }
+
+  .separator {
+    display: none; /* Kis képernyőkön eltüntetjük az elválasztó vonalat */
+  }
+}
+
+@media (max-width: 480px) {
+  .box {
+    padding: 10px; /* Kis képernyőkön csökkentsük a belső margókat */
+  }
+
+  th, td {
+    padding: 5px; /* Csökkentsük a cellák belső margóját */
+  }
+}
 </style>
+
